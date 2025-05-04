@@ -1,0 +1,79 @@
+/* ChampionshipList.css */
+
+/* Общий контейнер */
+.championship-list {
+    font-family: "Arial", sans-serif;
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #f9f9f9; /* Светлый фон для контента */
+    border-radius: 10px; /* Скругление углов */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для блока */
+  }
+  
+  /* Заголовок страницы */
+  .championship-list h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333; /* Тёмно-серый цвет текста */
+    margin-bottom: 20px;
+  }
+  
+  /* Контейнер для стран */
+  .championship-list .country {
+    margin-bottom: 20px; /* Отступ между странами */
+  }
+  
+  /* Название страны */
+  .championship-list .country h2 {
+    font-size: 1.5rem;
+    color: #444; /* Серый оттенок */
+    border-left: 4px solid #007bff; /* Синяя линия слева */
+    padding-left: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Список чемпионатов */
+  .championship-list .country ul {
+    list-style: none; /* Убираем стандартные маркеры списка */
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Элементы списка */
+  .championship-list .country ul li {
+    margin-bottom: 10px; /* Отступ между элементами списка */
+  }
+  
+  /* Ссылки на чемпионаты */
+  .championship-list .country ul li a {
+    text-decoration: none; /* Убираем подчеркивание */
+    color: #007bff; /* Синий цвет ссылки */
+    font-size: 1rem;
+    transition: color 0.3s ease, transform 0.2s ease; /* Плавный эффект при наведении */
+  }
+  
+  /* Эффект при наведении на ссылки */
+  .championship-list .country ul li a:hover {
+    color: #0056b3; /* Более тёмный синий при наведении */
+    transform: scale(1.05); /* Лёгкое увеличение размера */
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 600px) {
+    .championship-list {
+      padding: 15px;
+    }
+  
+    .championship-list h1 {
+      font-size: 1.5rem;
+    }
+  
+    .championship-list .country h2 {
+      font-size: 1.2rem;
+    }
+  
+    .championship-list .country ul li a {
+      font-size: 0.9rem;
+    }
+  }

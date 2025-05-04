@@ -1,13 +1,74 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: '/api', 
+  baseURL: "/api", // Базовый путь
   headers: {
-    'X-Auth-Token': import.meta.env.VITE_FOOTBALL_DATA_API_KEY, 
+    "X-Auth-Token": import.meta.env.VITE_FOOTBALL_DATA_API_KEY, // Токен для API
   },
 });
 
-// Получение матчей за указанный период
+// Получение списка стран и связанных с ними чемпионатов
+export const getCountriesAndLeagues = async () => {
+  try {
+    const response = await api.get("/competitions"); // Получение всех доступных чемпионатов
+    const competitions = response.data.competitions;
+
+    // Группируем чемпионаты по странам
+    const countriesAndLeagues = competitions.reduce((acc, competition) => {
+      const country = competition.area.name; // Название страны
+      if (!acc[country]) {
+        acc[country] = [];
+      }
+      acc[country].push({
+        id: competition.id,
+        name: competition.name,
+      });
+      return acc;
+    }, {});
+
+    return countriesAndLeagues; // Возвращаем объект: { "CountryName": [ { id, name }, ... ] }
+  } catch (error) {
+    console.error("Ошибка при получении стран и чемпионатов:", error);
+    throw error;
+  }
+};
+
+// Получение таблицы для конкретного чемпионата
+export const getTableForLeague = async (leagueId) => {
+  try {
+    const response = await api.get(`/competitions/${leagueId}/standings`);
+    return {
+      league: response.data.competition,
+      season: response.data.season,
+      standings: response.data.standings,
+    }; // Возвращаем информацию о чемпионате и таблицах
+  } catch (error) {
+    console.error(`Ошибка при получении таблицы для лиги ${leagueId}:`, error);
+    throw error;
+  }
+};
+export const getStandingsByCompetition = async (competitionId) => {
+  try {
+    const response = await api.get(`/competitions/${competitionId}/standings`);
+    return {
+      league: response.data.competition, // Информация о чемпионате
+      season: response.data.season, // Сезон
+      standings: response.data.standings, // Таблица
+    };
+  } catch (error) {
+    console.error(`Ошибка при получении таблицы для чемпионата ${competitionId}:`, error);
+    throw error;
+  }
+};
+export const getStandings = async () => {
+  try {
+    const response = await api.get("/competitions/standings");
+    return response.data.standings; // Предполагаем, что API возвращает поле `standings`
+  } catch (error) {
+    console.error("Ошибка при получении таблиц чемпионатов:", error);
+    throw error; // Пробрасываем ошибку для обработки
+  }
+};
 export const getMatches = async (dateFrom, dateTo) => {
   try {
     const response = await api.get('/competitions/CL/matches', {
@@ -22,32 +83,13 @@ export const getMatches = async (dateFrom, dateTo) => {
     throw error;
   }
 };
-// Получение таблиц чемпионатов
-export const getStandings = async () => {
+export const getCompetitions = async () => {
   try {
-    const response = await api.get("/competitions"); // Получение всех доступных чемпионатов
-    const competitions = response.data.competitions;
-
-    // Загружаем таблицы для каждого чемпионата
-    const standingsPromises = competitions.map(async (competition) => {
-      try {
-        const standingsResponse = await api.get(`/competitions/${competition.id}/standings`);
-        return {
-          competition,
-          season: standingsResponse.data.season,
-          standings: standingsResponse.data.standings,
-        };
-      } catch (err) {
-        console.error(`Ошибка при получении таблицы для чемпионата ${competition.name}:`, err);
-        return null;
-      }
-    });
-
-    const standingsData = await Promise.all(standingsPromises);
-    return standingsData.filter((standing) => standing !== null); // Фильтруем успешные запросы
+    const response = await api.get("/competitions"); // Запрос списка чемпионатов
+    return response.data; // Предполагаем, что ответ содержит объект с полем `competitions`
   } catch (error) {
     console.error("Ошибка при получении чемпионатов:", error);
-    throw error;
+    throw error; // Пробрасываем ошибку для обработки
   }
 };
 export default api;

@@ -5,6 +5,8 @@ import LiveScoresPage from './pages/LiveScoresPage';
 import profilePage from './pages/profilePage'; 
 import TabBar from './components/TabBar';
 import TablesPage from './pages/TablesPage';
+import ChampionshipList from "./components/ChampionshipList";
+import CompetitionTable from "./components/CompetitionTable";
 
 const App = () => {
   return (
@@ -14,7 +16,8 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/matches" element={<LiveScoresPage />} />
           <Route path="/profile" element={<profilePage />} /> 
-          <Route path="/tables" element={<TablesPage />} />
+          <Route path="/tables" element={<ChampionshipList />} /> {/* Список чемпионатов */}
+          <Route path="/tables/:id" element={<CompetitionTable />} /> {/* Таблица чемпионата */}
         </Routes>
         <TabBar />
       </div>
