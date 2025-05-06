@@ -1,10 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import LiveScoresPage from './pages/LiveScoresPage';
-import profilePage from './pages/profilePage'; 
+import LivePage from './pages/LivePage';
+import ScoresPage from './pages/ScoresPage';
+import ProfilePage from './pages/ProfilePage'; 
 import TabBar from './components/TabBar';
-import TablesPage from './pages/TablesPage';
 import ChampionshipList from "./components/ChampionshipList";
 import CompetitionTable from "./components/CompetitionTable";
 
@@ -13,9 +12,9 @@ const App = () => {
     <Router>
       <div className="app">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/matches" element={<LiveScoresPage />} />
-          <Route path="/profile" element={<profilePage />} /> 
+          <Route path="/" element={<LivePage />} />
+          <Route path="/matches" element={<ScoresPage />} />
+          <Route path="/profile" element={<ProfilePage />} /> 
           <Route path="/tables" element={<ChampionshipList />} /> {/* Список чемпионатов */}
           <Route path="/tables/:id" element={<CompetitionTable />} /> {/* Таблица чемпионата */}
         </Routes>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getMatches } from '../services/api';
 import LiveScoreCard from '../components/LiveScoreCard';
 
-const LiveScoresPage = () => {
+const ScoresPage = () => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,4 +45,4 @@ const LiveScoresPage = () => {
   );
 };
 
-export default LiveScoresPage;
+export default ScoresPage;
