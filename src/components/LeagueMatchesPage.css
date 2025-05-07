@@ -1,0 +1,123 @@
+/* Основной контейнер страницы */
+.league-matches-page {
+    font-family: Arial, sans-serif;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  /* Заголовок страницы */
+  .league-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #222;
+    margin-bottom: 20px;
+  }
+  
+  /* Блок загрузки и ошибок */
+  .loading,
+  .error {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  /* Контейнер для списка матчей */
+  .matches-container {
+    margin-top: 20px;
+  }
+  
+  /* Карточка матча */
+  .match-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .match-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Команды */
+  .team-names {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .team {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .home-team {
+    color: #007bff;
+  }
+  
+  .away-team {
+    color: #dc3545;
+  }
+  
+  .vs {
+    color: #888;
+    font-weight: normal;
+  }
+  
+  /* Информация о матче */
+  .match-info {
+    text-align: center;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .score {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .match-time {
+    font-size: 1rem;
+    color: #777;
+  }
+  
+  /* Сообщение, если матчей нет */
+  .no-matches {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+  }
+  
+  /* Мобильная адаптация */
+  @media (max-width: 600px) {
+    .league-title {
+      font-size: 1.5rem;
+    }
+  
+    .team-names {
+      font-size: 1rem;
+      flex-direction: column;
+    }
+  
+    .team {
+      margin-bottom: 5px;
+    }
+  
+    .vs {
+      margin-bottom: 10px;
+    }
+  
+    .match-info {
+      font-size: 0.9rem;
+    }
+  }

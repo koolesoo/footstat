@@ -1,0 +1,94 @@
+/* Основной контейнер страницы */
+.scores-page {
+    font-family: Arial, sans-serif;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  /* Заголовок страницы */
+  .title {
+    text-align: center;
+    font-size: 2rem;
+    color: #222;
+    margin-bottom: 20px;
+  }
+  
+  /* Блок загрузки и ошибок */
+  .loading,
+  .error {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  /* Контейнер чемпионатов */
+  .leagues-container {
+    margin-top: 20px;
+  }
+  
+  /* Название страны */
+  .country-name {
+    font-size: 1.5rem;
+    color: #444;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+  }
+  
+  /* Список чемпионатов */
+  .leagues-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+  }
+  
+  /* Элементы списка чемпионатов */
+  .league-item {
+    margin: 10px 0;
+  }
+  
+  /* Кнопка чемпионата */
+  .league-button {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  
+  .league-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Сообщение, если чемпионатов нет */
+  .no-leagues {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+  }
+  
+  /* Мобильная адаптация */
+  @media (max-width: 600px) {
+    .title {
+      font-size: 1.5rem;
+    }
+  
+    .country-name {
+      font-size: 1.2rem;
+    }
+  
+    .league-button {
+      font-size: 0.9rem;
+      padding: 8px 10px;
+    }
+  }
