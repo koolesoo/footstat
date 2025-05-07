@@ -92,4 +92,19 @@ export const getCompetitions = async () => {
     throw error; // Пробрасываем ошибку для обработки
   }
 };
+export const getMatchesByLeague = async (leagueId, dateFrom, dateTo) => {
+  try {
+    const response = await api.get(`/competitions/${leagueId}/matches`, {
+      params: {
+        dateFrom,
+        dateTo,
+      },
+    });
+    console.log(`Матчи для чемпионата ${leagueId}:`, response.data.matches); // Отладка
+    return response.data.matches; // Возвращаем список матчей
+  } catch (error) {
+    console.error(`Ошибка при получении матчей для чемпионата ${leagueId}:`, error);
+    throw error;
+  }
+};
 export default api;
