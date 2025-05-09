@@ -47,7 +47,12 @@ const LeagueMatchesPage = () => {
       {/* Выбор даты */}
       <label className="date-picker">
         Выберите дату:
-        <input type="date" value={date} onChange={handleDateChange} />
+        <input
+          type="date"
+          value={date}
+          onChange={handleDateChange}
+          className="date-input"
+        />
       </label>
 
       <div className="matches-container">
@@ -65,7 +70,12 @@ const LeagueMatchesPage = () => {
                     {match.score.fullTime.homeTeam} - {match.score.fullTime.awayTeam}
                   </span>
                 ) : (
-                  <span className="match-time">{match.utcDate}</span>
+                  <span className="match-time">
+                    {new Date(match.utcDate).toLocaleTimeString("ru-RU", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
                 )}
               </div>
             </div>

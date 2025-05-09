@@ -30,7 +30,9 @@
     justify-content: center;
     align-items: center;
   }
-  
+  .tab-item span {
+    white-space: nowrap; /* Запрещает перенос текста */
+  }
   .tab-item.active {
     color: #2c4ee4; 
     font-weight: 600;

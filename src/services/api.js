@@ -107,4 +107,30 @@ export const getMatchesByLeague = async (leagueId, dateFrom, dateTo) => {
     throw error;
   }
 };
+export const getAllTeams = async () => {
+  try {
+    const response = await api.get("/teams"); // Запрос на эндпоинт всех команд
+    return response.data.teams; // Предполагаем, что API возвращает поле `teams`
+  } catch (error) {
+    handleApiError(error, "Ошибка при получении всех команд:");
+  }
+};
+export const getTeamDetails = async (teamId) => {
+  const response = await axios.get(`${API_BASE_URL}/teams/${teamId}`);
+  return {
+    position: response.data.position, // Позиция в чемпионате
+  };
+};
+export const getTeamMatches = async (teamId) => {
+  const response = await axios.get(`${API_BASE_URL}/teams/${teamId}/matches`);
+  const matches = response.data.matches;
+
+  // Определяем последний и следующий матч
+  const lastMatch = matches
+    .filter((match) => new Date(match.utcDate) < new Date())
+    .pop();
+  const nextMatch = matches.find((match) => new Date(match.utcDate) > new Date());
+
+  return { lastMatch, nextMatch };
+};
 export default api;
