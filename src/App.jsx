@@ -6,15 +6,18 @@ import MyTeamPage from "./pages/MyTeamPage";
 import TabBar from "./components/TabBar";
 import ChampionshipList from "./components/ChampionshipList";
 import CompetitionTable from "./components/CompetitionTable";
-import LeagueMatchesPage from "./pages/LeagueMatchesPage"; // Импортируем новую страницу
+import LeagueMatchesPage from "./pages/LeagueMatchesPage";
+import Header from "./components/Header"; // Импортируем хедер
+import TablesCard from "./components/TablesCard";
 
 const App = () => {
   return (
     <Router>
       <div className="app">
+        <Header /> {/* Хедер добавлен здесь */}
         <Routes>
           <Route path="/matches" element={<ScoresPage />} />
-          <Route path="/matches/:leagueId" element={<LeagueMatchesPage />} /> {/* Новый маршрут */}
+          <Route path="/matches/:leagueId" element={<LeagueMatchesPage />} />
           <Route path="/" element={<MyTeamPage />} />
           <Route path="/tables" element={<ChampionshipList />} />
           <Route path="/tables/:id" element={<CompetitionTable />} />

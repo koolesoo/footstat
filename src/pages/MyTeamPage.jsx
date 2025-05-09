@@ -129,7 +129,7 @@ const MyTeamsPage = () => {
                 handlePinTeam(team);
               }}
             >
-              {pinnedTeam && pinnedTeam.id === team.id ? "♥ Закреплено" : "♡ Лайк"}
+              {pinnedTeam && pinnedTeam.id === team.id ? "♥" : "♡"}
             </button>
           </li>
         ))}

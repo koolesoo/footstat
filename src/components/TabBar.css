@@ -1,50 +1,73 @@
 .tab-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #fff;
-    border-top: 2px solid #ddd;
-    padding: 15px 0; 
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+  position: fixed; /* Зафиксировать TabBar */
+  bottom: 20px; /* Расстояние от нижнего края окна */
+  left: 50%; /* Центрирование по горизонтали */
+  transform: translateX(-50%); /* Центрирование через трансформацию */
+  width: 90%; /* Ширина контейнера */
+  max-width: 600px; /* Максимальная ширина */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 20px; /* Внутренние отступы */
+  background: rgba(241, 241, 241, 0.9); /* Прозрачный белый фон */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Тень */
+  backdrop-filter: blur(10px); /* Эффект размытия */
+  border-radius: 20px; /* Скругленные углы */
+  z-index: 1000; /* Высокий приоритет отображения */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Легкая рамка */
+  pointer-events: auto; /* Гарантируем кликабельность */
+}
+
+/* Стили для элементов TabBar */
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #555; /* Цвет текста неактивных вкладок */
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease, transform 0.3s ease; /* Плавные переходы */
+}
+
+.tab-item:hover {
+  transform: scale(1.1); /* Увеличение при наведении */
+  color: #2c4ee4; /* Цвет текста при наведении */
+}
+
+.tab-item.active {
+  color: #2c4ee4; /* Цвет текста активной вкладки */
+}
+
+/* Иконки TabBar */
+.tab-icon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  margin-bottom: 6px; /* Отступ между иконкой и текстом */
+  filter: grayscale(100%); /* Неактивные иконки серые */
+  opacity: 0.6; /* Уменьшенная прозрачность для неактивных иконок */
+  transition: filter 0.3s ease, opacity 0.3s ease; /* Плавный переход */
+}
+
+.tab-item.active .tab-icon img {
+  filter: none; /* Активные иконки полноцветные */
+  opacity: 1; /* Полная прозрачность для активных иконок */
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  .tab-bar {
+    width: 95%;
+    bottom: 10px;
+    padding: 10px 15px;
   }
-  
+
   .tab-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #828282;
-    text-decoration: none;
-    font-size: 16px; 
-    transition: color 0.3s ease, background-color 0.3s ease; 
-    width: 80px; 
-    height: 80px; 
-    margin-bottom: 8px;
-    background-color: #fff; 
-    border-radius: 5px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: 12px;
   }
-  .tab-item span {
-    white-space: nowrap; /* Запрещает перенос текста */
-  }
-  .tab-item.active {
-    color: #2c4ee4; 
-    font-weight: 600;
-  }
-  
-  .tab-item:hover {
-    color: #2c4ee4;
-    background-color: #f2f7f9; 
-  }
-  
+
   .tab-icon img {
-    width: 30px; 
-    height: 30px; 
-    object-fit: contain; 
+    width: 24px;
+    height: 24px;
   }
+}

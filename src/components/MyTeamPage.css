@@ -85,8 +85,8 @@ h1, h2 {
 }
 
 .unpin-button {
-  background-color: #ff4d4f;
-  color: #fff;
+  background-color: #ededed;
+  color: #1a1a1a;
   border: none;
   padding: 10px 15px;
   border-radius: 8px;
@@ -134,7 +134,7 @@ h1, h2 {
   width: 50px;
   height: 50px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 0 !important;
 }
 
 .team-name {

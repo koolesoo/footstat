@@ -27,3 +27,7 @@ h1 {
 .live-score-card p {
   margin: 5px 0;
 }
+
+.app {
+  padding-top: 60px; /* Отступ, чтобы маршруты не перекрывались хедером */
+}

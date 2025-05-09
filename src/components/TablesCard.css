@@ -1,37 +1,112 @@
-.tables-page {
-    padding: 20px;
+/* Карточка таблицы */
+.table-card {
+  background: #ffffff; /* Белый фон */
+  border-radius: 16px; /* Закругленные углы */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Мягкая тень */
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 900px; /* Ограничение ширины */
+  overflow-x: auto; /* Для скролла на маленьких экранах */
+}
+
+.table-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333333;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+thead tr {
+  background-color: #f8f9fa; /* Легкий серый фон */
+  color: #333333;
+  font-weight: 600;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+tbody tr:hover {
+  background-color: #f9f9f9; /* Легкий серый фон при наведении */
+}
+
+.team-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.team-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.form-cell {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.form-result {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: 6px;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+}
+
+.form-result.w {
+  background-color: #28a745; /* Зеленый */
+}
+
+.form-result.d {
+  background-color: #ffc107; /* Желтый */
+}
+
+.form-result.l {
+  background-color: #dc3545; /* Красный */
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .table-card {
+    padding: 15px;
   }
-  
-  .table-container {
-    margin-bottom: 40px;
+
+  .table-title {
+    font-size: 20px;
   }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  thead tr {
-    background-color: #007bff;
-    color: white;
-  }
-  
+
   th, td {
     padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
+    font-size: 14px;
   }
-  
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
+
+  .team-logo {
+    width: 20px;
+    height: 20px;
   }
-  
-  tr:hover {
-    background-color: #f1f1f1;
+
+  .form-result {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
   }
-  
-  .error {
-    color: red;
-    font-weight: bold;
-  }
+}

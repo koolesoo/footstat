@@ -1,0 +1,83 @@
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  z-index: 1000;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  max-height: 80px; /* Увеличен размер логотипа */
+  height: auto;
+  background-color: transparent; /* Убираем фон */
+  border-radius: 0; /* Убедитесь, что нет закругленных краев */
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.about-link {
+  text-decoration: none;
+  color: #2c4ee4;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.about-link:hover {
+  color: #001ea5;
+}
+
+.auth-button {
+  background: #2c4ee4;
+  color: white;
+  border: 1px solid #2c4ee4;
+  padding: 8px 15px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #001ea5;
+  border: 1px solid #001ea5;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  header {
+    padding: 10px 15px;
+  }
+
+  .header-right {
+    gap: 10px;
+  }
+
+  .about-link {
+    font-size: 14px;
+  }
+
+  .auth-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .logo img {
+    max-height: 70px; /* Логотип немного уменьшается на мобильных устройствах */
+  }
+}
