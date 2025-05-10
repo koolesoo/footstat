@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getStandingsByCompetition } from "../services/api"; // Метод для получения таблицы конкретного чемпионата
+import { getStandingsByCompetition } from "../services/api";
+import "./CompetitionTable.css";
 
 const CompetitionTable = () => {
-  const { id } = useParams(); // Получаем ID чемпионата из URL
+  const { id } = useParams();
   const [standings, setStandings] = useState(null);
+  const [competitionName, setCompetitionName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,8 +14,9 @@ const CompetitionTable = () => {
     const fetchTable = async () => {
       try {
         setLoading(true);
-        const data = await getStandingsByCompetition(id); // Загружаем таблицу по ID
-        setStandings(data.standings); // Предполагаем, что API возвращает поле `standings`
+        const data = await getStandingsByCompetition(id);
+        setStandings(data.standings || []);
+        setCompetitionName(data.competition?.name || "Неизвестный чемпионат");
       } catch (err) {
         console.error("Ошибка при загрузке таблицы:", err);
         setError("Не удалось загрузить таблицу.");
@@ -26,42 +29,60 @@ const CompetitionTable = () => {
   }, [id]);
 
   if (loading) return <p>Загрузка таблицы...</p>;
-  if (error) return <p className="error">{error}</p>;
+
+  if (error)
+    return (
+      <div className="error">
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Попробовать снова</button>
+      </div>
+    );
 
   return (
-    <div>
-      <h1>Таблица чемпионата</h1>
-      {standings.map((stage, index) => (
-        <div key={index}>
-          <h2>{stage.group || stage.stage}</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Position</th>
-                <th>Team</th>
-                <th>Points</th>
-                <th>Played</th>
-                <th>Won</th>
-                <th>Draw</th>
-                <th>Lost</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stage.table.map((team) => (
-                <tr key={team.team.id}>
-                  <td>{team.position}</td>
-                  <td>{team.team.name}</td>
-                  <td>{team.points}</td>
-                  <td>{team.playedGames}</td>
-                  <td>{team.won}</td>
-                  <td>{team.draw}</td>
-                  <td>{team.lost}</td>
+    <div className="table-container">
+      <h1 className="competition-title">{competitionName}</h1>
+      {standings?.length > 0 ? (
+        standings.map((stage, index) => (
+          <div key={index}>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th></th>
+                  <th>Сыграно</th>
+                  <th>Победы</th>
+                  <th>Ничьи</th>
+                  <th>Поражения</th>
+                  <th>Очки</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+              </thead>
+              <tbody>
+                {stage.table.map((team) => (
+                  <tr key={team.team.id}>
+                    <td>{team.position}</td>
+                    <td className="team-cell">
+                      <img
+                        src={team.team.crest || "fallback-logo.png"}
+                        alt={team.team.name}
+                        className="team-logo"
+                        onError={(e) => (e.target.src = "fallback-logo.png")}
+                      />
+                      {team.team.name}
+                    </td>
+                    <td>{team.playedGames}</td>
+                    <td>{team.won}</td>
+                    <td>{team.draw}</td>
+                    <td>{team.lost}</td>
+                    <td className="bold">{team.points}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))
+      ) : (
+        <p>Нет данных для отображения.</p>
+      )}
     </div>
   );
 };

@@ -1,0 +1,84 @@
+.table-container {
+  padding: 20px;
+  margin: 20px auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  overflow-x: auto;
+}
+
+/* Заголовок чемпионата */
+.competition-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Основной стиль таблицы */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: center; /* Данные по умолчанию выравниваются по центру */
+}
+
+/* Заголовки таблицы */
+thead th {
+  background-color: #f3f4f6;
+  color: #333;
+  font-weight: 600;
+  padding: 12px 10px;
+  border-bottom: 2px solid #e0e0e0;
+  text-align: center;
+}
+
+/* Строки таблицы */
+tbody td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #555;
+  text-align: center;
+}
+
+/* Команда с логотипом */
+.team-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Расстояние между логотипом и текстом */
+  justify-content: left; /* Выравнивание по левому краю */
+  text-align: left; /* Текст внутри ячейки тоже выравнивается влево */
+}
+
+/* Логотип команды */
+.team-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 50%; /* Опционально, если нужен круглый логотип */
+}
+
+/* Ховер-эффект для строк */
+tbody tr:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+/* Последняя строка без линии */
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Жирный шрифт для позиции */
+tbody td:first-child {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Жирный шрифт для очков */
+tbody td:last-child {
+  font-weight: bold;
+  font-size: 16px;
+}
