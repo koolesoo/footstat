@@ -1,15 +1,21 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css"; // Подключаем стили
 
 const Header = () => {
+  const navigate = useNavigate(); // Хук для программной маршрутизации (если понадобится)
+
   return (
     <header>
-      <a href="/" className="logo">
+      <Link to="/" className="logo">
         <img src="/images/logo.png" alt="FootStat Logo" />
-      </a>
+      </Link>
       <div className="header-right">
-        <a href="/about" className="about-link">О нас</a>
-        <button className="auth-button">Войти</button>
+        <Link to="/about" className="about-link">О нас</Link>
+        {/* Используем Link для маршрутизации */}
+        <Link to="/login" className="auth-button">
+          Войти
+        </Link>
       </div>
     </header>
   );

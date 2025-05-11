@@ -9,6 +9,7 @@ import CompetitionTable from "./components/CompetitionTable";
 import LeagueMatchesPage from "./pages/LeagueMatchesPage";
 import Header from "./components/Header"; // Импортируем хедер
 import TablesCard from "./components/TablesCard";
+import LoginPage from "./pages/LoginPage";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/" element={<MyTeamPage />} />
           <Route path="/tables" element={<ChampionshipList />} />
           <Route path="/tables/:id" element={<CompetitionTable />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
         <TabBar />
       </div>

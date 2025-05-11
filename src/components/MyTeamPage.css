@@ -14,13 +14,6 @@ body {
   padding: 20px;
 }
 
-/* Заголовок */
-h1, h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  color: #1a1a1a;
-}
-
 /* Поле поиска */
 .search-input {
   width: 100%;
@@ -31,7 +24,6 @@ h1, h2 {
   border-radius: 8px;
   outline: none;
   transition: border-color 0.3s ease;
-  background-color: #fff;
 }
 
 .search-input:focus {
@@ -44,7 +36,6 @@ h1, h2 {
 }
 
 .pinned-team-card {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -52,57 +43,34 @@ h1, h2 {
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  font-family: 'Inter', sans-serif;
   height: 140px;
-  max-width: 100%;
-  margin: 10px auto;
-  overflow: hidden;
 }
 
 .pinned-team-card img {
   width: 80px;
   height: 80px;
   object-fit: contain;
-  border-radius: 8px;
   margin-right: 20px;
-}
-
-.pinned-team-card .team-info {
-  flex-grow: 1;
-}
-
-.pinned-team-card h3 {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #333;
-}
-
-.pinned-team-card p {
-  font-size: 0.9rem;
-  color: #555;
-  margin: 0;
 }
 
 .unpin-button {
   background-color: #ededed;
-  color: #1a1a1a;
+  color: #333;
   border: none;
   padding: 10px 15px;
   border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .unpin-button:hover {
   background-color: #e04444;
+  color: #fff;
 }
 
 /* Список команд */
 .team-list {
-  list-style: none;
   padding: 0;
   margin: 0;
 }
@@ -111,17 +79,13 @@ h1, h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 15px;
   padding: 15px 20px;
   margin-bottom: 10px;
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.team-list-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .team-container {
@@ -134,25 +98,21 @@ h1, h2 {
   width: 50px;
   height: 50px;
   object-fit: contain;
-  border-radius: 0 !important;
 }
 
 .team-name {
   font-size: 1rem;
   font-weight: 500;
-  color: #333;
   flex-grow: 1;
-  text-align: left;
 }
 
+/* Кнопка лайка */
 .like-button {
   background-color: #f0f0f0;
   color: #333;
   border: none;
   padding: 8px 12px;
   border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -163,31 +123,5 @@ h1, h2 {
 
 .like-button.liked {
   background-color: #ff4d4f;
-  color: #fff;
-}
-
-/* Адаптивные стили */
-@media (max-width: 768px) {
-  .pinned-team-card {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: center;
-    height: auto;
-  }
-
-  .pinned-team-card img {
-    margin-bottom: 10px;
-    margin-right: 0;
-  }
-
-  .team-list-item {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: center;
-    padding: 10px;
-  }
-
-  .like-button {
-    margin-top: 10px;
-  }
+  color: white;
 }

@@ -5,10 +5,10 @@ import "../components/LeagueMatchesPage.css";
 
 const LeagueMatchesPage = () => {
   const { leagueId } = useParams();
-  const [matches, setMatches] = useState([]); // Список матчей
-  const [loading, setLoading] = useState(true); // Состояние загрузки
-  const [error, setError] = useState(null); // Ошибки
-  const [date, setDate] = useState(() => new Date().toISOString().split("T")[0]); // Текущая дата
+  const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [date, setDate] = useState(() => new Date().toISOString().split("T")[0]);
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -16,12 +16,9 @@ const LeagueMatchesPage = () => {
       setError(null);
 
       try {
-        const data = await getMatchesByLeague(leagueId); // Загружаем матчи
-        // Фильтруем матчи по выбранной дате
-        const filteredMatches = data.filter((match) =>
-          match.utcDate.startsWith(date)
-        );
-        setMatches(filteredMatches);
+        console.log(`Загружаем матчи для лиги ${leagueId} на дату ${date}`);
+        const matches = await getMatchesByLeague(leagueId, date, date);
+        setMatches(matches);
       } catch (err) {
         console.error("Ошибка при загрузке матчей:", err);
         setError("Не удалось загрузить матчи. Попробуйте позже.");
@@ -30,58 +27,113 @@ const LeagueMatchesPage = () => {
       }
     };
 
-    fetchMatches();
-  }, [leagueId, date]); // Перезагрузка при изменении даты или лиги
+    if (leagueId) {
+      fetchMatches();
+    }
+  }, [leagueId, date]);
 
   const handleDateChange = (event) => {
-    setDate(event.target.value); // Обновляем выбранную дату
+    setDate(event.target.value);
   };
 
-  if (loading) return <div className="loading">Загрузка матчей...</div>;
-  if (error) return <div className="error">{error}</div>;
+  const formatTime = (utcDate) => {
+    const matchDate = new Date(utcDate);
+    return matchDate.toLocaleTimeString("ru-RU", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const getDisplayResult = (match) => {
+    const homeScore = match?.score?.fullTime?.home;
+    const awayScore = match?.score?.fullTime?.away;
+
+    if (
+      homeScore === null ||
+      awayScore === null ||
+      homeScore === undefined ||
+      awayScore === undefined
+    ) {
+      return formatTime(match.utcDate);
+    }
+
+    return `${homeScore} - ${awayScore}`;
+  };
+
+  if (loading) {
+    return (
+      <div className="league-matches-page">
+        <div className="loading">Загрузка матчей...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="league-matches-page">
+        <div className="error">Ошибка: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="league-matches-page">
-      <h1 className="league-title">Матчи лиги</h1>
+      <h1 className="league-title">Матчи чемпионата</h1>
 
-      {/* Выбор даты */}
-      <label className="date-picker">
-        Выберите дату:
-        <input
-          type="date"
-          value={date}
-          onChange={handleDateChange}
-          className="date-input"
-        />
-      </label>
+      <div className="date-picker">
+        <label>
+          Выберите дату:
+          <input
+            type="date"
+            className="date-input"
+            value={date}
+            onChange={handleDateChange}
+          />
+        </label>
+      </div>
 
       <div className="matches-container">
         {matches.length > 0 ? (
           matches.map((match) => (
             <div key={match.id} className="match-card">
-              <div className="team-names">
-                <span className="team home-team">{match.homeTeam.name}</span>
-                <span className="vs">vs</span>
-                <span className="team away-team">{match.awayTeam.name}</span>
+              <div className="match-details">
+                <div className="team">
+                  {match.homeTeam.crest && (
+                    <img
+                      src={match.homeTeam.crest}
+                      alt={match.homeTeam.name}
+                      className="team-logo"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  )}
+                  <span className="team-name">{match.homeTeam.name}</span>
+                </div>
+                <div className="team">
+                  {match.awayTeam.crest && (
+                    <img
+                      src={match.awayTeam.crest}
+                      alt={match.awayTeam.name}
+                      className="team-logo"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  )}
+                  <span className="team-name">{match.awayTeam.name}</span>
+                </div>
               </div>
               <div className="match-info">
-                {match.status === "FINISHED" ? (
-                  <span className="score">
-                    {match.score.fullTime.homeTeam} - {match.score.fullTime.awayTeam}
-                  </span>
-                ) : (
-                  <span className="match-time">
-                    {new Date(match.utcDate).toLocaleTimeString("ru-RU", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                )}
+                <div className="match-result">{getDisplayResult(match)}</div>
+                <div className="match-date">
+                  {new Date(match.utcDate).toLocaleDateString("ru-RU")}
+                </div>
               </div>
             </div>
           ))
         ) : (
-          <p className="no-matches">На выбранную дату матчей нет.</p>
+          <div className="no-matches">На выбранную дату матчей нет.</div>
         )}
       </div>
     </div>

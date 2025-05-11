@@ -10,7 +10,7 @@ const TabBar = () => {
         className={({ isActive }) => (isActive ? "tab-item active" : "tab-item")}
       >
         <div className="tab-icon">
-          <img src="/images/matches.png" alt="Матчи" />
+          <img src="/images/pitch.png" alt="Матчи" />
         </div>
         <span>Результаты</span>
       </NavLink>
