@@ -1,49 +1,57 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  getAllTeams,
-  getStandingsByCompetition,
-} from "../services/api";
-import TabBar from "../components/TabBar"; // Импорт TabBar
+import { getAllTeams, getStandingsByCompetition } from "../services/api";
+import { useAuth } from "../context/AuthContext";
+import TabBar from "../components/TabBar";
 import "../components/MyTeamPage.css";
 
 const MyTeamsPage = () => {
-  const [teams, setTeams] = useState([]); // Все команды
-  const [filteredTeams, setFilteredTeams] = useState([]); // Отфильтрованные команды
-  const [search, setSearch] = useState(""); // Поисковый запрос
-  const [pinnedTeam, setPinnedTeam] = useState(null); // Закреплённая команда
-  const [loading, setLoading] = useState(true); // Состояние загрузки
-  const [error, setError] = useState(null); // Состояние ошибки
-  const [teamCompetitions, setTeamCompetitions] = useState([]); // Места команды в чемпионатах
+  const { currentUser } = useAuth();
+  const [teams, setTeams] = useState([]);
+  const [filteredTeams, setFilteredTeams] = useState([]);
+  const [search, setSearch] = useState("");
+  const [pinnedTeam, setPinnedTeam] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [teamCompetitions, setTeamCompetitions] = useState([]);
 
-  const pinnedTeamRef = useRef(null); // Референс для автоскролла к закреплённой карточке
+  const pinnedTeamRef = useRef(null);
 
-  // Получение всех команд
+  // Получение всех команд и закрепленной команды пользователя
   useEffect(() => {
-    const fetchTeams = async () => {
+    const fetchTeamsAndFavorite = async () => {
       try {
+        // Загружаем все команды
         const teamsData = await getAllTeams();
         setTeams(teamsData);
         setFilteredTeams(teamsData);
-        setLoading(false);
 
-        // Проверяем, есть ли закреплённая команда в localStorage
-        const savedTeam = localStorage.getItem("pinnedTeam");
-        if (savedTeam) {
-          const parsedTeam = JSON.parse(savedTeam);
-          const foundTeam = teamsData.find((team) => team.id === parsedTeam.id);
-          if (foundTeam) {
-            setPinnedTeam(foundTeam);
+        // Если пользователь авторизован, загружаем его любимую команду
+        if (currentUser) {
+          const response = await fetch(
+            `http://localhost:5001/api/fav-team/${currentUser.id}`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            if (data.team_id) {
+              const favoriteTeam = teamsData.find(
+                (team) => team.id === data.team_id
+              );
+              if (favoriteTeam) {
+                setPinnedTeam(favoriteTeam);
+              }
+            }
           }
         }
+        setLoading(false);
       } catch (err) {
-        console.error("Ошибка при получении команд:", err);
-        setError("Ошибка при загрузке команд. Попробуйте позже.");
+        console.error("Ошибка при получении данных:", err);
+        setError("Ошибка при загрузке данных. Попробуйте позже.");
         setLoading(false);
       }
     };
 
-    fetchTeams();
-  }, []);
+    fetchTeamsAndFavorite();
+  }, [currentUser]);
 
   // Фильтрация команд по поисковому запросу
   useEffect(() => {
@@ -57,20 +65,18 @@ const MyTeamsPage = () => {
   useEffect(() => {
     const fetchTeamCompetitions = async () => {
       if (!pinnedTeam) {
-        setTeamCompetitions([]); // Сбрасываем данные, если нет закреплённой команды
+        setTeamCompetitions([]);
         return;
       }
 
       try {
-        const competitions = pinnedTeam.runningCompetitions || []; // Берём все чемпионаты команды
+        const competitions = pinnedTeam.runningCompetitions || [];
         const competitionDetails = [];
 
-        // Проходим по всем чемпионатам команды
         for (const competition of competitions) {
           const standingsData = await getStandingsByCompetition(competition.id);
           const standings = standingsData.standings[0]?.table || [];
 
-          // Ищем команду в таблице чемпионата
           const teamStanding = standings.find(
             (entry) => entry.team.id === pinnedTeam.id
           );
@@ -83,30 +89,64 @@ const MyTeamsPage = () => {
         }
 
         setTeamCompetitions(competitionDetails);
-
-        // Скроллим к закреплённой карточке
         pinnedTeamRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
       } catch (err) {
-        console.error("Ошибка при получении мест команды в чемпионатах:", err);
+        console.error("Ошибка при получении мест команды:", err);
       }
     };
 
     fetchTeamCompetitions();
   }, [pinnedTeam]);
 
-  // Обработчик закрепления команды
-  const handlePinTeam = (team) => {
-    const newPinnedTeam = pinnedTeam && pinnedTeam.id === team.id ? null : team;
-    setPinnedTeam(newPinnedTeam);
+  // Обработчик закрепления/открепления команды
+  const handlePinTeam = async (team) => {
+    if (!currentUser) {
+      alert("Для выбора любимой команды необходимо войти в систему");
+      return;
+    }
 
-    // Сохраняем или удаляем закреплённую команду в localStorage
-    if (newPinnedTeam) {
-      localStorage.setItem("pinnedTeam", JSON.stringify(newPinnedTeam));
-    } else {
-      localStorage.removeItem("pinnedTeam");
+    try {
+      // Если команда уже закреплена - открепляем
+      if (pinnedTeam && pinnedTeam.id === team.id) {
+        await fetch("http://localhost:5001/api/fav-team", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: currentUser.id,
+            team_id: team.id,
+            team_name: team.name,
+          }),
+
+        });
+        setPinnedTeam(null);
+      } else {
+        // Иначе закрепляем новую команду
+        const response = await fetch("http://localhost:5001/api/fav-team", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: currentUser.id,
+            team_id: team.id,
+            team_name: team.name,
+          }),
+        });
+
+        if (response.ok) {
+          setPinnedTeam(team);
+        } else {
+          throw new Error("Ошибка сохранения команды");
+        }
+      }
+    } catch (err) {
+      console.error("Ошибка при обновлении любимой команды:", err);
+      setError("Не удалось сохранить выбор команды");
     }
   };
 
@@ -126,9 +166,8 @@ const MyTeamsPage = () => {
   return (
     <>
       <div className="container">
-        <h1>Список команд</h1>
+        <h1>Моя команда</h1>
 
-        {/* Поле поиска */}
         <input
           type="text"
           className="search-input"
@@ -137,22 +176,19 @@ const MyTeamsPage = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        {/* Блок для закреплённой команды */}
         {pinnedTeam && (
           <div className="pinned-team" ref={pinnedTeamRef}>
-            <h2>Закреплённая команда</h2>
+            <h2>Ваша любимая команда</h2>
             <div className="pinned-team-card">
               <img src={pinnedTeam.crest} alt={`${pinnedTeam.name} logo`} />
               <div className="team-info">
                 <h3>{pinnedTeam.name}</h3>
-
-                {/* Места команды в чемпионатах */}
                 <h4>Места в чемпионатах:</h4>
                 <ul>
                   {teamCompetitions.map((competition, index) => (
                     <li key={index}>
-                      <strong>{competition.competitionName}:</strong>{" "}
-                      Позиция {competition.position} ({competition.points} очков)
+                      <strong>{competition.competitionName}:</strong> Позиция{" "}
+                      {competition.position} ({competition.points} очков)
                     </li>
                   ))}
                 </ul>
@@ -161,13 +197,13 @@ const MyTeamsPage = () => {
                 onClick={() => handlePinTeam(pinnedTeam)}
                 className="unpin-button"
               >
-                Удалить
+                Изменить выбор
               </button>
             </div>
           </div>
         )}
 
-        {/* Список всех команд */}
+        <h2>Все команды</h2>
         <ul className="team-list">
           {filteredTeams.map((team) => (
             <li key={team.id} className="team-list-item">
@@ -190,6 +226,11 @@ const MyTeamsPage = () => {
                   e.stopPropagation();
                   handlePinTeam(team);
                 }}
+                aria-label={
+                  pinnedTeam && pinnedTeam.id === team.id
+                    ? "Удалить из избранного"
+                    : "Добавить в избранное"
+                }
               >
                 {pinnedTeam && pinnedTeam.id === team.id ? "♥" : "♡"}
               </button>
@@ -198,7 +239,6 @@ const MyTeamsPage = () => {
         </ul>
       </div>
 
-      {/* TabBar с передачей логотипа закреплённой команды */}
       <TabBar likedTeamLogo={pinnedTeam?.crest} />
     </>
   );
