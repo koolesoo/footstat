@@ -48,18 +48,13 @@ export const getTableForLeague = async (leagueId) => {
   }
 };
 export const getStandingsByCompetition = async (competitionId) => {
-  try {
-    const response = await api.get(`/competitions/${competitionId}/standings`);
-    return {
-      league: response.data.competition, // Информация о чемпионате
-      season: response.data.season, // Сезон
-      standings: response.data.standings, // Таблица
-    };
-  } catch (error) {
-    console.error(`Ошибка при получении таблицы для чемпионата ${competitionId}:`, error);
-    throw error;
+  const response = await fetch(`http://localhost:5001/api/standings/${competitionId}`);
+  if (!response.ok) {
+    throw new Error("Ошибка при загрузке standings");
   }
+  return await response.json();
 };
+
 export const getStandings = async () => {
   try {
     const response = await api.get("/competitions/standings");
@@ -84,14 +79,12 @@ export const getMatches = async (dateFrom, dateTo) => {
   }
 };
 export const getCompetitions = async () => {
-  try {
-    const response = await api.get("/competitions"); // Запрос списка чемпионатов
-    return response.data; // Предполагаем, что ответ содержит объект с полем `competitions`
-  } catch (error) {
-    console.error("Ошибка при получении чемпионатов:", error);
-    throw error; // Пробрасываем ошибку для обработки
-  }
+  const response = await fetch("http://localhost:5001/api/competitions");
+  if (!response.ok) throw new Error("Ошибка при загрузке чемпионатов");
+  const data = await response.json();
+  return data; // { competitions: [...] }
 };
+
 export const getMatchesByLeague = async (leagueId, dateFrom, dateTo) => {
   const response = await fetch(
     `http://localhost:5001/api/matches/${leagueId}?dateFrom=${dateFrom}&dateTo=${dateTo}`
@@ -103,13 +96,11 @@ export const getMatchesByLeague = async (leagueId, dateFrom, dateTo) => {
   return data.matches;
 };
 export const getAllTeams = async () => {
-  try {
-    const response = await api.get("/teams"); // Запрос на эндпоинт всех команд
-    return response.data.teams; // Предполагаем, что API возвращает поле `teams`
-  } catch (error) {
-    handleApiError(error, "Ошибка при получении всех команд:");
-  }
+  const response = await fetch("http://localhost:5001/api/teams");
+  const data = await response.json();
+  return data.teams;
 };
+
 export const getTeamDetails = async (teamId) => {
   const response = await axios.get(`${API_BASE_URL}/teams/${teamId}`);
   return {
@@ -128,4 +119,11 @@ export const getTeamMatches = async (teamId) => {
 
   return { lastMatch, nextMatch };
 };
+export const getTeamsGroupedByCompetition = async () => {
+  const response = await fetch("http://localhost:5001/api/teams/grouped-by-competition");
+  if (!response.ok) throw new Error("Ошибка загрузки команд");
+  return response.json();
+};
+
+
 export default api;
