@@ -6,7 +6,8 @@ import "../components/LeagueMatchesPage.css";
 const LeagueMatchesPage = () => {
   const { leagueId } = useParams();
   const [matches, setMatches] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
   const [error, setError] = useState(null);
   const [date, setDate] = useState(() => new Date().toISOString().split("T")[0]);
 
@@ -14,6 +15,11 @@ const LeagueMatchesPage = () => {
     const fetchMatches = async () => {
       setLoading(true);
       setError(null);
+
+      // Устанавливаем таймаут для показа спиннера
+      const spinnerTimeout = setTimeout(() => {
+        setShowSpinner(true);
+      }, 1000); // Показываем спиннер, если загрузка длится больше 1 секунды
 
       try {
         console.log(`Загружаем матчи для лиги ${leagueId} на дату ${date}`);
@@ -23,6 +29,8 @@ const LeagueMatchesPage = () => {
         console.error("Ошибка при загрузке матчей:", err);
         setError("Не удалось загрузить матчи. Попробуйте позже.");
       } finally {
+        clearTimeout(spinnerTimeout); // Убираем таймаут для спиннера
+        setShowSpinner(false); // Прячем спиннер
         setLoading(false);
       }
     };
@@ -63,7 +71,12 @@ const LeagueMatchesPage = () => {
   if (loading) {
     return (
       <div className="league-matches-page">
-        <div className="loading">Загрузка матчей...</div>
+        {showSpinner && (
+          <div className="loading">
+            <div className="spinner"></div>
+            Загрузка матчей...
+          </div>
+        )}
       </div>
     );
   }
@@ -71,7 +84,11 @@ const LeagueMatchesPage = () => {
   if (error) {
     return (
       <div className="league-matches-page">
-        <div className="error">Ошибка: {error}</div>
+        <div className="error">
+          <h2>Ошибка</h2>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()}>Обновить</button>
+        </div>
       </div>
     );
   }
@@ -104,11 +121,17 @@ const LeagueMatchesPage = () => {
                       alt={match.homeTeam.name}
                       className="team-logo"
                       onError={(e) => {
-                        e.target.style.display = 'none';
+                        e.target.style.display = "none";
                       }}
                     />
                   )}
-                  <span className="team-name">{match.homeTeam.name}</span>
+                  <span
+                    className={`team-name ${
+                      match.score?.winner === "HOME_TEAM" ? "winner" : ""
+                    }`}
+                  >
+                    {match.homeTeam.name}
+                  </span>
                 </div>
                 <div className="team">
                   {match.awayTeam.crest && (
@@ -117,11 +140,17 @@ const LeagueMatchesPage = () => {
                       alt={match.awayTeam.name}
                       className="team-logo"
                       onError={(e) => {
-                        e.target.style.display = 'none';
+                        e.target.style.display = "none";
                       }}
                     />
                   )}
-                  <span className="team-name">{match.awayTeam.name}</span>
+                  <span
+                    className={`team-name ${
+                      match.score?.winner === "AWAY_TEAM" ? "winner" : ""
+                    }`}
+                  >
+                    {match.awayTeam.name}
+                  </span>
                 </div>
               </div>
               <div className="match-info">
